@@ -17,6 +17,7 @@
 #include <vector>
 #include "graph.h"
 #include <typeinfo>
+#include <queue>
 
 using namespace::std;
 /*----------------------- Application includes -------------------------------*/
@@ -59,13 +60,59 @@ vector<Key> Graph_Schema :: traverse_dfs(Key startNode)
 
 	while(!bDone)
 	{
-
 		cout<<"Traversing Graph: "<<it->first<<endl;	
 		cout<<" Node count is  "<<_node_count<<endl;
 		_dfs((it->first), out, v, count);
 		it++;
 		if(it == _graph.end())
 			it = _graph.begin();
+		bDone = count == _node_count;
+	}
+
+	return out;
+}
+
+Graph_Template
+vector<Key> Graph_Schema :: traverse_bfs(Key startNode)
+{
+	queue<Key> q;
+	unordered_map<Key, bool> visited;
+	vector<Key> out;
+	bool bDone = false;
+	U_Int count = 0;
+	auto it = _graph.find(startNode);
+	if(it == _graph.end()) it = _graph.begin();
+
+	while(!bDone)
+	{
+		if(visited[it->first] == false)
+		{
+		cout<<"PRocessing "<<it->first<<endl;
+			q.push(it->first);
+			cout<<"Pushing : "<<it->first<<endl;
+		}
+		while(!q.empty())
+		{
+			auto p = q.front();
+			q.pop(); 
+	
+			out.push_back(p);
+			count++;
+			visited[p] = true;
+			auto i = _graph.find(p);
+			if(i == _graph.end()) continue;
+
+			for(auto neighbour = (i->second).begin(); neighbour != (i->second).end(); neighbour++)
+			{
+				if(visited[neighbour->first] == false)
+				{
+					q.push(neighbour->first);
+					cout<<" ** Pushing : "<<neighbour->first<<endl;
+				}
+			}
+		}
+		it++;
+		if(it == _graph.end()) it = _graph.begin();
 		bDone = count == _node_count;
 	}
 
@@ -100,4 +147,5 @@ vector<Key> Graph_Schema :: serialize()
 /*----------------------- Function exports -----------------------------------*/
 template vector<int>  Graph<int,int,int> :: serialize();
 template vector<int>  Graph<int,int,int> :: traverse_dfs (int startNode);
+template vector<int>  Graph<int,int,int> :: traverse_bfs (int startNode);
 /*----------------------- End-------------------------------------------------*/

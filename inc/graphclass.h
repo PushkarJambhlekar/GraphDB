@@ -40,10 +40,12 @@ public:
 		_graph_type = type;
 		_node_count = 0;
 		_edge_count = 0;
+		cout<<"Graph type is : "<<_graph_type<<endl;
 	}
 
 	GRAPH_STATUS insert_edge  (Key from, Key to, Weight weight=Weight());
 	vector<Key>  traverse_dfs (Key startNode);
+	vector<Key>  traverse_bfs (Key startNode);
 	vector<Key>  serialize    ();
         GRAPH_STATUS insertKey    (Key k, Value v);
 	GRAPH_STATUS removeKey	  (Key k);
