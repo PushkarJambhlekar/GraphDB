@@ -36,7 +36,7 @@ Graph_Template
 GRAPH_STATUS Graph_Schema ::  insert_edge(Key from, Key to, Weight weight)
 {
 	int updateCount = 1;
-
+	int nc          = 0;
 	if(_db.find(to) == _db.end() || _db.find(from) == _db.end())
 		return GRAPH_ERR_KEY_NOT_PRESENT;
 
@@ -44,12 +44,30 @@ GRAPH_STATUS Graph_Schema ::  insert_edge(Key from, Key to, Weight weight)
 	{
 		unordered_map<Key,Weight> p = (_graph.find(from))->second;
 		if(p.find(to) != p.end())
+		{
 			updateCount = 0;
+		}
 	}
 
-	_graph[from][to] =weight;
-	_edge_count     += updateCount;
+	if(_nodes.find(from) == _nodes.end())
+	{
+		nc++;
+		_nodes.insert(from);
+	}
+	if (_nodes.find(to)  == _nodes.end())
+	{
+		_nodes.insert(to);
+		nc++;
+	}
 
+	cout<<"Updating Node: "<<from<<" to "<<to<<endl;
+	_graph[from][to] =weight;
+	if(_graph_type & GRAPH_TYPE_UNDIRECTED)
+		_graph[to][from] = weight;
+
+	_edge_count     += updateCount;
+	_node_count     += nc;
+	cout <<" Node count is "<<_node_count<<endl;
 	return GRAPH_OK;
 }
 

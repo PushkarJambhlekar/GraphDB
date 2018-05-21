@@ -22,9 +22,23 @@ int main()
 	p.insertKey(1,2);
 	p.insertKey(2,2);
 	p.insertKey(3,2);
+	p.insertKey(4,2);
+	p.insertKey(5,2);
+	p.insertKey(6,2);
 	p.insert_edge(2,1,4);
 	p.insert_edge(4,1,4);
 	p.insert_edge(2,4,4);
-	p.traverse_dfs(0);
+	p.insert_edge(3,4,4);
+	p.insert_edge(5,6,4);
+	p.insert_edge(5,1,4);
+	vector<int> out = p.traverse_dfs(0);
+
+	for(auto i : out)
+	{
+		printf("%d\t",i);
+	}
+	printf("\n");
+
+	p.serialize();
 	return 0;
 }

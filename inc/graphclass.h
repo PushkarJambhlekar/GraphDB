@@ -12,6 +12,7 @@
 */
 
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include "graphtypes.h"
 using namespace::std;
@@ -25,11 +26,14 @@ Graph_Template
 class Graph
 {
 private:
+	unordered_set<Key>				_nodes;
 	unordered_map<Key, Value> 			_db;
 	unordered_map<Key, unordered_map<Key,Weight>> 	_graph;
 	Graph_Type 					_graph_type;
 	U_Int 						_edge_count;
 	U_Int 						_node_count;
+
+	void _dfs(Key, vector<Key>&, unordered_map<Key,bool>&, U_Int&); 
 public:
 	Graph(u_int type=GRAPH_TYPE_UNDIRECTED)
 	{
@@ -40,6 +44,7 @@ public:
 
 	GRAPH_STATUS insert_edge  (Key from, Key to, Weight weight=Weight());
 	vector<Key>  traverse_dfs (Key startNode);
+	vector<Key>  serialize    ();
         GRAPH_STATUS insertKey    (Key k, Value v);
 	GRAPH_STATUS removeKey	  (Key k);
 };
